@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Discord Webhook送信</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+        }
+        form {
+            max-width: 400px;
+            margin: 0 auto;
+        }
+        label {
+            display: block;
+            margin-top: 10px;
+            font-weight: bold;
+        }
+        input {
+            width: 100%;
+            padding: 8px;
+            margin: 5px 0 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        button {
+            width: 100%;
+            padding: 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <h1>Discord Webhook送信フォーム</h1>
+    <form id="webhookForm">
+        <label for="username">ユーザーネーム</label>
+        <input type="text" id="username" placeholder="ユーザーネームを入力" required>
+
+        <label for="vehicle">欲しい車両</label>
+        <input type="text" id="vehicle" placeholder="車両名を入力" required>
+
+        <label for="userId">ID</label>
+        <input type="number" id="userId" placeholder="IDを入力" required>
+
+        <button type="button" onclick="sendToDiscord()">送信</button>
+    </form>
+
+    <script>
+        function sendToDiscord() {
+            const webhookURL = "YOUR_WEBHOOK_URL"; // Webhook URLをここに設定
+            const username = document.getElementById("username").value;
+            const vehicle = document.getElementById("vehicle").value;
+            const userId = document.getElementById("userId").value;
+
+            // Webhookに送信するデータを設定
+            const payload = {
+                content: `**新しいリクエスト**\nユーザーネーム: ${username}\n欲しい車両: ${vehicle}\nID: ${userId}`
+            };
+
+            // Webhookへデータ送信
+            fetch(webhookURL, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(payload)
+            })
+            .then(response => {
+                if (response.ok) {
+                    alert("送信成功！");
+                } else {
+                    alert("送信失敗...");
+                }
+            })
+            .catch(error => {
+                console.error("エラー:", error);
+                alert("送信エラーが発生しました");
+            });
+        }
+    </script>
+</body>
+</html>
